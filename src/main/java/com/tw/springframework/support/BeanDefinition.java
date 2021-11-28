@@ -1,4 +1,4 @@
-package com.tw.springframework;
+package com.tw.springframework.support;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
