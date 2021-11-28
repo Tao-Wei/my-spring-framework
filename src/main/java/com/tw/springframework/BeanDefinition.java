@@ -12,5 +12,5 @@ public class BeanDefinition {
     /**
      * bean 对象实例
      */
-    private Object bean;
+    private Class beanClass;
 }
