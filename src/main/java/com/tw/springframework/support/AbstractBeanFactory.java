@@ -22,7 +22,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @param beanName
      * @param beanDefinition
      */
-    protected abstract Object createBean(String beanName, Object beanDefinition);
+    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition)throws BeansException;
 
     /**
      * 从bean定义池中获取bean定义对象
