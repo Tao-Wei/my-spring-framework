@@ -5,7 +5,7 @@ import com.tw.springframework.config.InstantiationStrategy;
 import java.lang.reflect.Constructor;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
-    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
+    private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     /**
      * 创建bena实例，并且放入单利池中

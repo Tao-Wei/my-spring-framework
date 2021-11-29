@@ -12,7 +12,7 @@ public class BeanFactoryTest {
     public void testBeanFactory() {
         DefaultListableBeanFactory defaultListableBeanFactory = new DefaultListableBeanFactory();
         defaultListableBeanFactory.registerBeanDefinition("person", new BeanDefinition(Person.class));
-        Object person = defaultListableBeanFactory.getBean("person");
+        Object person = defaultListableBeanFactory.getBean("person","小陶",25);
         System.out.println(person==defaultListableBeanFactory.getBean("person"));
     }
 }
