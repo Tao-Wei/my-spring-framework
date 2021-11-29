@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class Person {
     private String name;
     private Integer age;
+    private Dog dog;
 
 }
