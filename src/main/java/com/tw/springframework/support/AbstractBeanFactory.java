@@ -33,7 +33,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @param beanName
      * @return
      */
-    protected abstract BeanDefinition getBeanDefinition(String beanName);
+    public  abstract BeanDefinition getBeanDefinition(String beanName);
 
 
 }
