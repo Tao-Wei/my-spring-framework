@@ -1,9 +1,11 @@
 package com.tw.springframework.support;
 
-import com.tw.springframework.exception.BeansException;
+import com.tw.springframework.config.InstantiationStrategy;
+
+import java.lang.reflect.Constructor;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
-
+    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
 
     /**
      * 创建bena实例，并且放入单利池中
@@ -15,13 +17,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
-        Object bean;
-        try {
-            bean = beanDefinition.getBeanClass().newInstance();
-            addSingleton(beanName, bean);
-            return bean;
-        } catch (Exception e) {
-            throw new BeansException("创建bean对象出现错误");
+        Object bean = null;
+        for (Constructor declaredConstructor : beanDefinition.getBeanClass().getDeclaredConstructors()) {
+            if (declaredConstructor.getParameterTypes().length == args.length) {
+                bean = instantiationStrategy.instantiate(beanDefinition, declaredConstructor, args);
+                addSingleton(beanName, bean);
+            }
         }
+        return bean;
     }
 }

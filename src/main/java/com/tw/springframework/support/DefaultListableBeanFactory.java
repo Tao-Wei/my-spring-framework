@@ -1,7 +1,6 @@
 package com.tw.springframework.support;
 
 import com.tw.springframework.config.BeanDefinitionRegistry;
-import com.tw.springframework.exception.BeansException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

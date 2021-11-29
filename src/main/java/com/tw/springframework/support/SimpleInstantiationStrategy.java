@@ -6,7 +6,7 @@ import com.tw.springframework.exception.BeansException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class SimpleInstantiationStrategyImpl implements InstantiationStrategy {
+public class SimpleInstantiationStrategy implements InstantiationStrategy {
     @Override
     public Object instantiate(BeanDefinition beanDefinition, Constructor constructor, Object... args) {
         Class beanClass = beanDefinition.getBeanClass();
