@@ -1,22 +1,22 @@
 package com.tw.springframework;
 
 
+import com.tw.springframework.config.BeanDefinitionReader;
 import com.tw.springframework.pojo.Dog;
 import com.tw.springframework.pojo.Person;
 import com.tw.springframework.support.*;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
 public class BeanFactoryTest {
     @Test
-    public void testBeanFactory() {
+    public void testBeanFactory() throws IOException, ClassNotFoundException {
         DefaultListableBeanFactory defaultListableBeanFactory = new DefaultListableBeanFactory();
-        BeanDefinition dogBeanDefinition = new BeanDefinition(Dog.class, new PropertyValues(Collections.singletonList(new PropertyValue("name", "小黑"))));
-        BeanDefinition personBeanDefinition = new BeanDefinition(Person.class, new PropertyValues(Arrays.asList(new PropertyValue("name", "小陶"), new PropertyValue("dog", new BeanReference("dog")))));
-        defaultListableBeanFactory.registerBeanDefinition("dog",dogBeanDefinition);
-        defaultListableBeanFactory.registerBeanDefinition("person",personBeanDefinition);
+        BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(defaultListableBeanFactory, null);
+        beanDefinitionReader.LoadBeanDefinition("classpath:applicationContext.xml");
         System.out.println(defaultListableBeanFactory.getBean("person"));
 
     }

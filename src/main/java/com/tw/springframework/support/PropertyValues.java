@@ -2,6 +2,7 @@ package com.tw.springframework.support;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class PropertyValues {
     private final List<PropertyValue> propertyValueList;
 
     public PropertyValues(List<PropertyValue> propertyValueList) {
-        this.propertyValueList = propertyValueList == null ? Collections.emptyList() : propertyValueList;
+        this.propertyValueList = propertyValueList == null ? new ArrayList<>() : propertyValueList;
     }
 
     public void addPropertyValues(PropertyValue pv) {
