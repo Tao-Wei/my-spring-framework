@@ -18,6 +18,9 @@ public class BeanFactoryTest {
         BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(defaultListableBeanFactory, null);
         beanDefinitionReader.LoadBeanDefinition("classpath:applicationContext.xml");
         System.out.println(defaultListableBeanFactory.getBean("person"));
+        System.out.println(Arrays.toString(defaultListableBeanFactory.getBeanDefinitionNames()));
+        System.out.println(defaultListableBeanFactory.getBeansOfType(Person.class));
+
 
     }
 }
