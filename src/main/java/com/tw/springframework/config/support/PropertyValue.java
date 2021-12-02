@@ -1,4 +1,4 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import lombok.Data;
 

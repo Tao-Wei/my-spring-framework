@@ -1,9 +1,17 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import com.tw.springframework.config.BeanFactory;
+import com.tw.springframework.config.ConfigurableBeanFactory;
 import com.tw.springframework.exception.BeansException;
+import com.tw.springframework.extension.BeanPostProcessor;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
     @Override
     public Object getBean(String beanName) {
         //尝试从单例池获取bean
@@ -52,4 +60,12 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     public abstract BeanDefinition getBeanDefinition(String beanName);
 
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        beanPostProcessors.add(beanPostProcessor);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
 }

@@ -2,14 +2,17 @@ package com.tw.springframework;
 
 
 import com.tw.springframework.config.BeanDefinitionReader;
-import com.tw.springframework.pojo.Dog;
+import com.tw.springframework.config.BeanFactory;
+import com.tw.springframework.config.support.DefaultListableBeanFactory;
+import com.tw.springframework.config.support.XmlBeanDefinitionReader;
+import com.tw.springframework.context.support.ClassPathXmlApplicationContext;
+import com.tw.springframework.pojo.ModifyAgeBeanPostProcessor;
 import com.tw.springframework.pojo.Person;
-import com.tw.springframework.support.*;
+import com.tw.springframework.pojo.RenameBeanFactoryPostProcessor;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class BeanFactoryTest {
     @Test
@@ -17,10 +20,16 @@ public class BeanFactoryTest {
         DefaultListableBeanFactory defaultListableBeanFactory = new DefaultListableBeanFactory();
         BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(defaultListableBeanFactory, null);
         beanDefinitionReader.LoadBeanDefinition("classpath:applicationContext.xml");
-        System.out.println(defaultListableBeanFactory.getBean("person"));
-        System.out.println(Arrays.toString(defaultListableBeanFactory.getBeanDefinitionNames()));
-        System.out.println(defaultListableBeanFactory.getBeansOfType(Person.class));
+        new RenameBeanFactoryPostProcessor().PostProcessBeanFactory(defaultListableBeanFactory);
+        defaultListableBeanFactory.addBeanPostProcessor(new ModifyAgeBeanPostProcessor());
+        Object bean = defaultListableBeanFactory.getBean("person");
+        System.out.println(bean);
+    }
 
+    @Test
+    public void testApplicationContext() throws IOException, ClassNotFoundException {
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        System.out.println(classPathXmlApplicationContext.getBeansOfType(Person.class));
 
     }
 }

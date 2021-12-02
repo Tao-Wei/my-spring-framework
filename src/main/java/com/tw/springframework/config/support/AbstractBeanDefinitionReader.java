@@ -1,4 +1,4 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import com.tw.springframework.config.BeanDefinitionReader;
 import com.tw.springframework.config.BeanDefinitionRegistry;

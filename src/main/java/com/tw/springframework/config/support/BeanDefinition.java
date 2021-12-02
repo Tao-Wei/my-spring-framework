@@ -1,8 +1,7 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * bean定义对象

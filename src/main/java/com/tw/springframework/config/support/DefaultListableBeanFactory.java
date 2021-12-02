@@ -1,7 +1,8 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import com.tw.springframework.config.BeanDefinitionRegistry;
 import com.tw.springframework.config.ConfigurableListableBeanFactory;
+import com.tw.springframework.exception.BeansException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +14,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     @Override
     public BeanDefinition getBeanDefinition(String beanName) {
         return beanDefinitions.get(beanName);
+    }
+
+    @Override
+    public void preInstantiateSingletons() throws BeansException {
+        beanDefinitions.keySet().forEach(this::getBean);
     }
 
     @Override

@@ -11,4 +11,7 @@
     <bean id="dog" class="com.tw.springframework.pojo.Dog">
         <property name="name" value="小黑"/>
     </bean>
+    <bean class="com.tw.springframework.pojo.RenameBeanFactoryPostProcessor"/>
+    <bean class="com.tw.springframework.pojo.ModifyAgeBeanPostProcessor"/>
+
 </beans>

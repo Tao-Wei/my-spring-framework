@@ -1,9 +1,11 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.tw.springframework.config.InstantiationStrategy;
+import com.tw.springframework.extension.BeanPostProcessor;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
@@ -23,10 +25,36 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (declaredConstructor.getParameterTypes().length == args.length) {
                 bean = instantiationStrategy.instantiate(beanDefinition, declaredConstructor, args);
                 applyPropertyValues(beanDefinition, bean);
+                bean = initializeBean(beanName, bean, beanDefinition);
                 addSingleton(beanName, bean);
             }
         }
         return bean;
+    }
+
+
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
+        return wrappedBean;
+    }
+
+    private Object applyBeanPostProcessorsAfterInitialization(Object bean, String beanName) {
+        List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+            beanPostProcessor.postProcessAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    private Object applyBeanPostProcessorsBeforeInitialization(Object bean, String beanName) {
+        List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+            beanPostProcessor.postProcessBeforeInitialization(bean, beanName);
+        }
+        return bean;
+
     }
 
     /**
@@ -43,9 +71,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             //如果字段的值，指向另外一个bean实例
             if (fieldValue instanceof BeanReference) {
                 BeanReference beanReference = (BeanReference) fieldValue;
-                realValue=getBean(beanReference.getBeanName());
+                realValue = getBean(beanReference.getBeanName());
             }
-            BeanUtil.setProperty(bean,fieldName,realValue);
+            BeanUtil.setProperty(bean, fieldName, realValue);
         }
     }
 }

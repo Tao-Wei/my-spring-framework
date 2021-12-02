@@ -1,9 +1,8 @@
-package com.tw.springframework.support;
+package com.tw.springframework.config.support;
 
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
