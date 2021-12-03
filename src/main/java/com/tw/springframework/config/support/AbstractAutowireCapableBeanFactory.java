@@ -4,10 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.tw.springframework.config.InstantiationStrategy;
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.lifecycle.BeanPostProcessor;
-import com.tw.springframework.lifecycle.DisposableBean;
-import com.tw.springframework.lifecycle.DisposableBeanAdapter;
-import com.tw.springframework.lifecycle.InitializingBean;
+import com.tw.springframework.lifecycle.*;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -49,6 +46,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanFactoryAware){
+                ((BeanNameAware)bean).setBeanName(beanName);
+            }
+        }
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
         //执行初始化方法
         invokeInitMethods(bean, beanDefinition);

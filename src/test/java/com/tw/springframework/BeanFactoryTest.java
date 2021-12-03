@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 public class BeanFactoryTest {
     @Test
@@ -22,15 +23,22 @@ public class BeanFactoryTest {
         beanDefinitionReader.LoadBeanDefinition("classpath:applicationContext.xml");
         new RenameBeanFactoryPostProcessor().PostProcessBeanFactory(defaultListableBeanFactory);
         defaultListableBeanFactory.addBeanPostProcessor(new ModifyAgeBeanPostProcessor());
-        Object bean = defaultListableBeanFactory.getBean("person");
-        System.out.println(bean);
-        defaultListableBeanFactory.destroySingletons();
+        Person person = defaultListableBeanFactory.getBean("person",Person.class);
+        System.out.println(person);
+
+        System.out.println(person.getBeanFactory()==defaultListableBeanFactory);
+        System.out.println(person.getBeanName());
+
     }
 
     @Test
     public void testApplicationContext() throws IOException, ClassNotFoundException {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        System.out.println(classPathXmlApplicationContext.getBeansOfType(Person.class));
+        Person person = classPathXmlApplicationContext.getBean("person", Person.class);
+        System.out.println(person.getApplicationContext()==classPathXmlApplicationContext);
+        System.out.println(person.getBeanName());
+        System.out.println(person.getBeanFactory());
+
         classPathXmlApplicationContext.registerShutdownHook();
     }
 }

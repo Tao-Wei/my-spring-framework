@@ -1,7 +1,8 @@
 package com.tw.springframework.pojo;
 
-import com.tw.springframework.lifecycle.DisposableBean;
-import com.tw.springframework.lifecycle.InitializingBean;
+import com.tw.springframework.config.BeanFactory;
+import com.tw.springframework.context.ApplicationContext;
+import com.tw.springframework.lifecycle.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Person implements InitializingBean, DisposableBean {
+public class Person implements InitializingBean, DisposableBean, BeanFactoryAware, ApplicationContextAware, BeanNameAware {
     private String name;
     private Integer age;
     private Dog dog;
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
+    private String beanName;
 
     @Override
     public void destroy() throws Exception {
@@ -30,5 +34,20 @@ public class Person implements InitializingBean, DisposableBean {
 
     public void initMethod() {
         System.out.println("person的initMethod被调用");
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
+
+    @Override
+    public void setBeanName(String beanName) {
+        this.beanName = beanName;
     }
 }
