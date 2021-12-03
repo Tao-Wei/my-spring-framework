@@ -1,7 +1,7 @@
 package com.tw.springframework.pojo;
 
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.extension.BeanPostProcessor;
+import com.tw.springframework.lifecycle.BeanPostProcessor;
 
 public class ModifyAgeBeanPostProcessor implements BeanPostProcessor {
     @Override

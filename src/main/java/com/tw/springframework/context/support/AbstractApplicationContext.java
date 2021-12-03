@@ -4,10 +4,9 @@ import com.tw.springframework.config.ConfigurableListableBeanFactory;
 import com.tw.springframework.context.ConfigurableApplicationContext;
 import com.tw.springframework.core.DefaultResourceLoader;
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.extension.BeanFactoryPostProcessor;
-import com.tw.springframework.extension.BeanPostProcessor;
+import com.tw.springframework.lifecycle.BeanFactoryPostProcessor;
+import com.tw.springframework.lifecycle.BeanPostProcessor;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 

@@ -2,7 +2,7 @@ package com.tw.springframework.config.support;
 
 import com.tw.springframework.config.SingletonBeanRegistry;
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.extension.DisposableBean;
+import com.tw.springframework.lifecycle.DisposableBean;
 
 import java.util.HashMap;
 import java.util.Map;

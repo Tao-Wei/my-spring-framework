@@ -1,9 +1,8 @@
 package com.tw.springframework.config.support;
 
-import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.config.ConfigurableBeanFactory;
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.extension.BeanPostProcessor;
+import com.tw.springframework.lifecycle.BeanPostProcessor;
 
 import java.util.ArrayList;
 import java.util.List;

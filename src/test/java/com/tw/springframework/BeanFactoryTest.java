@@ -24,12 +24,13 @@ public class BeanFactoryTest {
         defaultListableBeanFactory.addBeanPostProcessor(new ModifyAgeBeanPostProcessor());
         Object bean = defaultListableBeanFactory.getBean("person");
         System.out.println(bean);
+        defaultListableBeanFactory.destroySingletons();
     }
 
     @Test
     public void testApplicationContext() throws IOException, ClassNotFoundException {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
         System.out.println(classPathXmlApplicationContext.getBeansOfType(Person.class));
-
+        classPathXmlApplicationContext.registerShutdownHook();
     }
 }

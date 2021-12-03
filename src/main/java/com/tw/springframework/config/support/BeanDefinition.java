@@ -15,4 +15,14 @@ public class BeanDefinition {
     private Class beanClass;
 
     private PropertyValues propertyValues;
+
+    /**
+     * xml配置文件中配置的init-method值
+     */
+    private String initMethodName;
+    /**
+     * xml配置文件中配置的destroy-method值
+     */
+    private String destroyMethodName;
+
 }

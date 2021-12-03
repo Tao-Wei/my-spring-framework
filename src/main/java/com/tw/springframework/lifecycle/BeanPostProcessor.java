@@ -1,4 +1,4 @@
-package com.tw.springframework.extension;
+package com.tw.springframework.lifecycle;
 
 import com.tw.springframework.exception.BeansException;
 

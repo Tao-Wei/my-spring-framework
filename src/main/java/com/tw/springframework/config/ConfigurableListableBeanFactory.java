@@ -2,7 +2,7 @@ package com.tw.springframework.config;
 
 import com.tw.springframework.config.support.BeanDefinition;
 import com.tw.springframework.exception.BeansException;
-import com.tw.springframework.extension.BeanPostProcessor;
+import com.tw.springframework.lifecycle.BeanPostProcessor;
 
 public interface ConfigurableListableBeanFactory extends ConfigurableBeanFactory, ListableBeanFactory, AutowireCapableBeanFactory {
 
