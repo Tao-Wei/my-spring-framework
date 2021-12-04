@@ -30,7 +30,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         } catch (Exception e) {
             throw new BeansException("Instantiation " + beanName + " fail");
         }
-        addSingleton(beanName, bean);
+        //单例的bean对象才加入单例池
+        if (beanDefinition.isSingleton()) {
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
@@ -50,8 +53,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (bean instanceof BeanFactoryAware) {
                 ((BeanFactoryAware) bean).setBeanFactory(this);
             }
-            if (bean instanceof BeanFactoryAware){
-                ((BeanNameAware)bean).setBeanName(beanName);
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
             }
         }
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
@@ -63,6 +66,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     //如果bean有销毁方法，那么注册到，要销毁的bean池
     private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (!beanDefinition.isSingleton()) {
+            return;
+        }
         if (bean instanceof DisposableBean || StrUtil.isNotBlank(beanDefinition.getDestroyMethodName())) {
             registerDisposableBean(beanName, new DisposableBeanAdapter(beanName, bean, beanDefinition.getDestroyMethodName()));
         }

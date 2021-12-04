@@ -1,5 +1,6 @@
 package com.tw.springframework.config.support;
 
+import com.tw.springframework.config.ConfigurableBeanFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BeanDefinition {
+
     /**
      * bean 对象实例
      */
@@ -25,4 +27,24 @@ public class BeanDefinition {
      */
     private String destroyMethodName;
 
+    private boolean singleton = true;
+    private boolean prototype = false;
+
+    /**
+     * 对象作用域
+     */
+    private String scope;
+
+    public BeanDefinition(Class beanClass, PropertyValues propertyValues, String initMethodName, String destroyMethodName) {
+        this.beanClass = beanClass;
+        this.propertyValues = propertyValues;
+        this.initMethodName = initMethodName;
+        this.destroyMethodName = destroyMethodName;
+    }
+
+    public void setScope(String scope) {
+        singleton = ConfigurableBeanFactory.SCOPE_SINGLETON.equals(scope);
+        prototype = ConfigurableBeanFactory.SCOPE_PROTOTYPE.equals(scope);
+        this.scope = scope;
+    }
 }

@@ -3,11 +3,12 @@ package com.tw.springframework.config.support;
 import com.tw.springframework.config.ConfigurableBeanFactory;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.BeanPostProcessor;
+import com.tw.springframework.lifecycle.FactoryBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
@@ -30,15 +31,23 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
 
     private Object doGetBean(String beanName, Object... args) {
-        Object bean = getSingleton(beanName);
-        if (bean != null) {
-            return bean;
+        Object sharedInstance = getSingleton(beanName);
+        if (sharedInstance != null) {
+            return getObjectForBeanInstance(sharedInstance, beanName);
         }
         BeanDefinition beanDefinition = getBeanDefinition(beanName);
         if (beanDefinition == null) {
             throw new BeansException("bean定义对象不存在");
         }
-        return createBean(beanName, beanDefinition, args);
+        Object bean = createBean(beanName, beanDefinition, args);
+        return getObjectForBeanInstance(bean,beanName);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (beanInstance instanceof FactoryBean) {
+            return getObjectFromFactoryBean((FactoryBean) beanInstance, beanName);
+        }
+        return beanInstance;
     }
 
     /**

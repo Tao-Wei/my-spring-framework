@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Person implements InitializingBean, DisposableBean, BeanFactoryAware, ApplicationContextAware, BeanNameAware {
     private String name;
@@ -17,6 +16,10 @@ public class Person implements InitializingBean, DisposableBean, BeanFactoryAwar
     private ApplicationContext applicationContext;
     private BeanFactory beanFactory;
     private String beanName;
+
+    public Person() {
+        System.out.println("person");
+    }
 
     @Override
     public void destroy() throws Exception {

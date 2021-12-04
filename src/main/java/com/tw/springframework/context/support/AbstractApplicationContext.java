@@ -51,7 +51,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessors) {
             beanFactoryPostProcessor.PostProcessBeanFactory(beanFactory);
         }
-
     }
 
     /**

@@ -6,6 +6,7 @@ import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.config.support.DefaultListableBeanFactory;
 import com.tw.springframework.config.support.XmlBeanDefinitionReader;
 import com.tw.springframework.context.support.ClassPathXmlApplicationContext;
+import com.tw.springframework.pojo.Dog;
 import com.tw.springframework.pojo.ModifyAgeBeanPostProcessor;
 import com.tw.springframework.pojo.Person;
 import com.tw.springframework.pojo.RenameBeanFactoryPostProcessor;
@@ -23,10 +24,10 @@ public class BeanFactoryTest {
         beanDefinitionReader.LoadBeanDefinition("classpath:applicationContext.xml");
         new RenameBeanFactoryPostProcessor().PostProcessBeanFactory(defaultListableBeanFactory);
         defaultListableBeanFactory.addBeanPostProcessor(new ModifyAgeBeanPostProcessor());
-        Person person = defaultListableBeanFactory.getBean("person",Person.class);
+        Person person = defaultListableBeanFactory.getBean("person", Person.class);
         System.out.println(person);
 
-        System.out.println(person.getBeanFactory()==defaultListableBeanFactory);
+        System.out.println(person.getBeanFactory() == defaultListableBeanFactory);
         System.out.println(person.getBeanName());
 
     }
@@ -34,10 +35,17 @@ public class BeanFactoryTest {
     @Test
     public void testApplicationContext() throws IOException, ClassNotFoundException {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        Person person = classPathXmlApplicationContext.getBean("person", Person.class);
-        System.out.println(person.getApplicationContext()==classPathXmlApplicationContext);
-        System.out.println(person.getBeanName());
-        System.out.println(person.getBeanFactory());
+//        Person person = classPathXmlApplicationContext.getBean("person", Person.class);
+
+        for (int i = 0; i < 10; i++) {
+//            classPathXmlApplicationContext.getBean("person", Dog.class);
+        }
+        for (int i = 0; i < 10; i++) {
+//            Dog dog = classPathXmlApplicationContext.getBean("dog", Dog.class);
+        }
+        for (int i = 0; i < 10; i++) {
+            classPathXmlApplicationContext.getBean("personFactory" );
+        }
 
         classPathXmlApplicationContext.registerShutdownHook();
     }

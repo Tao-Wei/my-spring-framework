@@ -3,15 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod">
+    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod" scope="singleton">
         <property name="name" value="小陶"/>
         <property name="age" value="22"/>
         <property name="dog" ref="dog"/>
     </bean>
-    <bean id="dog" class="com.tw.springframework.pojo.Dog">
-        <property name="name" value="小黑"/>
+    <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype">
     </bean>
     <bean class="com.tw.springframework.pojo.RenameBeanFactoryPostProcessor"/>
     <bean class="com.tw.springframework.pojo.ModifyAgeBeanPostProcessor"/>
+    <bean class="com.tw.springframework.pojo.PersonFactory" id="personFactory"/>
 
 </beans>
