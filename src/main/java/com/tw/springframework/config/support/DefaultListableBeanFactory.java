@@ -39,4 +39,5 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     public <T> Map<String, T> getBeansOfType(Class<T> clazz) {
         return beanDefinitions.entrySet().stream().filter(x -> clazz.isAssignableFrom(x.getValue().getBeanClass())).collect(Collectors.toMap(Map.Entry::getKey, x -> getBean(x.getKey(), clazz)));
     }
+
 }

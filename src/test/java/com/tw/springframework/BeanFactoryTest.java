@@ -6,6 +6,7 @@ import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.config.support.DefaultListableBeanFactory;
 import com.tw.springframework.config.support.XmlBeanDefinitionReader;
 import com.tw.springframework.context.support.ClassPathXmlApplicationContext;
+import com.tw.springframework.event.CustomEvent;
 import com.tw.springframework.pojo.Dog;
 import com.tw.springframework.pojo.ModifyAgeBeanPostProcessor;
 import com.tw.springframework.pojo.Person;
@@ -35,18 +36,7 @@ public class BeanFactoryTest {
     @Test
     public void testApplicationContext() throws IOException, ClassNotFoundException {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-//        Person person = classPathXmlApplicationContext.getBean("person", Person.class);
-
-        for (int i = 0; i < 10; i++) {
-//            classPathXmlApplicationContext.getBean("person", Dog.class);
-        }
-        for (int i = 0; i < 10; i++) {
-//            Dog dog = classPathXmlApplicationContext.getBean("dog", Dog.class);
-        }
-        for (int i = 0; i < 10; i++) {
-            classPathXmlApplicationContext.getBean("personFactory" );
-        }
-
         classPathXmlApplicationContext.registerShutdownHook();
+        classPathXmlApplicationContext.publishEvent(new CustomEvent(BeanFactoryTest.class, "加油，卷起来"));
     }
 }

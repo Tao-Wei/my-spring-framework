@@ -14,4 +14,5 @@
     <bean class="com.tw.springframework.pojo.ModifyAgeBeanPostProcessor"/>
     <bean class="com.tw.springframework.pojo.PersonFactory" id="personFactory"/>
 
+    <bean class="com.tw.springframework.event.CustomListener" id="customListener"/>
 </beans>
