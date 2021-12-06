@@ -4,12 +4,14 @@ import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.context.ApplicationContext;
 import com.tw.springframework.lifecycle.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class Person implements InitializingBean, DisposableBean, BeanFactoryAware, ApplicationContextAware, BeanNameAware {
+@Builder
+public class Person implements InitializingBean, DisposableBean, BeanFactoryAware, ApplicationContextAware, BeanNameAware ,Helloable{
     private String name;
     private Integer age;
     private Dog dog;
@@ -52,5 +54,9 @@ public class Person implements InitializingBean, DisposableBean, BeanFactoryAwar
     @Override
     public void setBeanName(String beanName) {
         this.beanName = beanName;
+    }
+
+    public void hello() {
+        System.out.println("hello");
     }
 }
