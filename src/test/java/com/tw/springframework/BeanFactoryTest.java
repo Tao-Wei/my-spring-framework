@@ -3,6 +3,7 @@ package com.tw.springframework;
 
 import com.tw.springframework.aop.AdvisedSupport;
 import com.tw.springframework.aop.AspectJExpressionPointcut;
+import com.tw.springframework.aop.Cglib2AopProxy;
 import com.tw.springframework.aop.JdkDynamicAopProxy;
 import com.tw.springframework.config.BeanDefinitionReader;
 import com.tw.springframework.config.BeanFactory;
@@ -47,7 +48,7 @@ public class BeanFactoryTest {
     public void testMethodMatcher() throws NoSuchMethodException {
         Class<Person> personClass = Person.class;
         Method helloMethod= personClass.getDeclaredMethod("hello");
-        new AspectJExpressionPointcut("execution(* com.tw.springframework.pojo.Helloable.*(..))").matches(helloMethod,personClass);
+        System.out.println(new AspectJExpressionPointcut("execution(* com.tw.springframework.pojo.Person.*(..))").matches(helloMethod, personClass));
     }
 
     @Test
@@ -61,6 +62,8 @@ public class BeanFactoryTest {
                 return res;
             }
         });
-        ((Helloable) new JdkDynamicAopProxy(advisedSupport).getProxy()).hello();
+//        ((Helloable) new JdkDynamicAopProxy(advisedSupport).getProxy()).hello();
+        Helloable proxy = (Helloable) new Cglib2AopProxy(advisedSupport).getProxy();
+        proxy.hello();
     }
 }
