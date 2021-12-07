@@ -48,7 +48,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 String beanName = StrUtil.isBlank(id) ? name : id;
                 if (StrUtil.isBlank(beanName)) {
                     String simpleName = beanClass.getSimpleName();
-                    simpleName = ((char) (simpleName.charAt(0) | 0x10)) + simpleName.substring(1);
+                    simpleName = ((char) (simpleName.charAt(0) | 0x20)) + simpleName.substring(1);
                     beanName = simpleName;
                 }
 

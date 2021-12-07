@@ -2,6 +2,7 @@ package com.tw.springframework.config.support;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.tw.springframework.aop.InstantiationAwareBeanPostProcessor;
 import com.tw.springframework.config.InstantiationStrategy;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.*;
@@ -24,6 +25,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
         Object bean = null;
         try {
+            //调用InstantiationAwareBeanPostProcessor的实现类一个机会,他们去尝试创建对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (null != bean) {
+                return bean;
+            }
+
             bean = createBeanInstance(beanDefinition, args);
             applyPropertyValues(beanDefinition, bean);
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -33,6 +40,30 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         //单例的bean对象才加入单例池
         if (beanDefinition.isSingleton()) {
             addSingleton(beanName, bean);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param beanName
+     * @param beanDefinition
+     * @return
+     */
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
         }
         return bean;
     }
@@ -53,7 +84,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (bean instanceof BeanFactoryAware) {
                 ((BeanFactoryAware) bean).setBeanFactory(this);
             }
-            if (bean instanceof BeanFactoryAware) {
+            if (bean instanceof BeanNameAware) {
                 ((BeanNameAware) bean).setBeanName(beanName);
             }
         }

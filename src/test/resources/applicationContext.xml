@@ -3,17 +3,26 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod" scope="singleton">
+    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod"
+          scope="singleton">
         <property name="name" value="小陶"/>
         <property name="age" value="22"/>
         <property name="dog" ref="dog"/>
     </bean>
-    <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype">
-    </bean>
-    <bean class="com.tw.springframework.pojo.RenameBeanFactoryPostProcessor"/>
-    <bean class="com.tw.springframework.pojo.ModifyAgeBeanPostProcessor"/>
-    <bean class="com.tw.springframework.pojo.PersonFactory" id="personFactory"/>
+    <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype"></bean>
 
-    <bean class="com.tw.springframework.event.CustomListener" id="customListener"/>
+<!--    InstantiationAwareBeanPostProcessor接口的实现类，用来创建代理类-->
+    <bean class="com.tw.springframework.aop.DefaultAdvisorAutoProxyCreator" />
+    <!--    自定义的前置通知类-->
+    <bean id="mybeforeAdvice" class="com.tw.springframework.aop.MyBeforeAdvice"/>
+    <!--  使用前置通知拦截其包装自定义通知 -->
+    <bean id="myMethodInterceptor" class="com.tw.springframework.aop.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="mybeforeAdvice"/>
+    </bean>
+    <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* com.tw.springframework.pojo.Person.*(..))"/>
+        <property name="advice" ref="myMethodInterceptor"/>
+    </bean>
+
 
 </beans>

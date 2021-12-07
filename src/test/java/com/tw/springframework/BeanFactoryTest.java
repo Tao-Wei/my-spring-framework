@@ -53,17 +53,8 @@ public class BeanFactoryTest {
 
     @Test
     public void testAOP() {
-        AdvisedSupport advisedSupport = new AdvisedSupport(new Person(), new AspectJExpressionPointcut("execution(* com.tw.springframework.pojo.*.*(..))"), new MethodInterceptor() {
-            @Override
-            public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-                System.out.println("方法运行前，打印日志");
-                Object res = methodInvocation.proceed();
-                System.out.println("方法运行后，打印日志");
-                return res;
-            }
-        });
-//        ((Helloable) new JdkDynamicAopProxy(advisedSupport).getProxy()).hello();
-        Helloable proxy = (Helloable) new Cglib2AopProxy(advisedSupport).getProxy();
-        proxy.hello();
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        Object person = classPathXmlApplicationContext.getBean("person");
+        ((Person)person).hello();
     }
 }

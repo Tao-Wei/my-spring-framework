@@ -2,10 +2,12 @@ package com.tw.springframework.aop;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.aopalliance.intercept.MethodInterceptor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AdvisedSupport {
     /**
      * 被代理对象
@@ -19,4 +21,8 @@ public class AdvisedSupport {
      * 方法拦截器，增强的逻辑写在invoke方法。实现类让用户提供，
      */
     private MethodInterceptor methodInterceptor;
+    /**
+     * 是否使用cglib代理
+     */
+    private boolean proxyTargetClass =true;
 }
