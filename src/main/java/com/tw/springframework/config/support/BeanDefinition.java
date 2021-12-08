@@ -3,11 +3,13 @@ package com.tw.springframework.config.support;
 import com.tw.springframework.config.ConfigurableBeanFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * bean定义对象
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class BeanDefinition {
 

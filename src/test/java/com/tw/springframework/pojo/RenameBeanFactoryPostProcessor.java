@@ -7,7 +7,10 @@ import com.tw.springframework.lifecycle.BeanFactoryPostProcessor;
 
 public class RenameBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     @Override
-    public void PostProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        beanFactory.getBeanDefinition("person").getPropertyValues().addPropertyValues(new PropertyValue("name", "suepr 小陶"));
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        PropertyValue pv = new PropertyValue();
+        pv.setName("name");
+        pv.setValue("super 小陶");
+        beanFactory.getBeanDefinition("person").getPropertyValues().addPropertyValue(pv);
     }
 }

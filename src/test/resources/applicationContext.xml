@@ -5,24 +5,27 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
     <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod"
           scope="singleton">
-        <property name="name" value="小陶"/>
-        <property name="age" value="22"/>
+        <property name="name" value="${person.name}"/>
+        <property name="age" value="${person.age}"/>
         <property name="dog" ref="dog"/>
     </bean>
     <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype"></bean>
 
-<!--    InstantiationAwareBeanPostProcessor接口的实现类，用来创建代理类-->
-    <bean class="com.tw.springframework.aop.DefaultAdvisorAutoProxyCreator" />
+    <!--    InstantiationAwareBeanPostProcessor接口的实现类，用来创建代理类-->
+    <bean class="com.tw.springframework.aop.DefaultAdvisorAutoProxyCreator"/>
     <!--    自定义的前置通知类-->
     <bean id="mybeforeAdvice" class="com.tw.springframework.aop.MyBeforeAdvice"/>
     <!--  使用前置通知拦截其包装自定义通知 -->
     <bean id="myMethodInterceptor" class="com.tw.springframework.aop.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="mybeforeAdvice"/>
     </bean>
-    <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* com.tw.springframework.pojo.Person.*(..))"/>
-        <property name="advice" ref="myMethodInterceptor"/>
+<!--    <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">-->
+<!--        <property name="expression" value="execution(* com.tw.springframework.pojo.Person.*(..))"/>-->
+<!--        <property name="advice" ref="myMethodInterceptor"/>-->
+<!--    </bean>-->
+    <!--  一个beanFactoryPostProcessor的实例，用来将beanDefinition中的占位符替换成真实值-->
+    <bean class="com.tw.springframework.lifecycle.PropertyPlaceholderConfigurer" id="propertyPlaceholderConfigurer">
+        <property name="location" value="classpath:applicationContext.properties"/>
     </bean>
-
-
+    <context:component-scan base-package="com.tw.springframework.pojo.testanno"/>
 </beans>

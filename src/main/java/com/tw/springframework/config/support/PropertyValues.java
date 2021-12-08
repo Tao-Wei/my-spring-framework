@@ -16,7 +16,7 @@ public class PropertyValues {
         this.propertyValueList = propertyValueList == null ? new ArrayList<>() : propertyValueList;
     }
 
-    public void addPropertyValues(PropertyValue pv) {
+    public void addPropertyValue(PropertyValue pv) {
         this.propertyValueList.add(pv);
     }
 
