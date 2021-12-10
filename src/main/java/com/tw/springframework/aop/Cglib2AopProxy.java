@@ -1,5 +1,7 @@
 package com.tw.springframework.aop;
 
+import com.tw.springframework.annotation.Scope;
+import com.tw.springframework.utils.ClassUtils;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -14,10 +16,11 @@ public class Cglib2AopProxy implements AopProxy {
         this.advisedSupport = advisedSupport;
     }
 
+
     @Override
     public Object getProxy() {
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(advisedSupport.getTarget().getClass());
+        enhancer.setSuperclass(advisedSupport.getTargetSource().getTargetClass());
         enhancer.setCallback(new DynamicAdvisedInterceptor(advisedSupport));
         return enhancer.create();
     }
@@ -31,11 +34,7 @@ public class Cglib2AopProxy implements AopProxy {
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            CglibMethodInvocation methodInvocation = new CglibMethodInvocation(advised.getTarget(), method, objects, methodProxy);
-            if (advised.getMethodMatcher().matches(method, advised.getTarget().getClass())) {
-                return advised.getMethodInterceptor().invoke(methodInvocation);
-            }
-            return methodInvocation.proceed();
+            return null;
         }
     }
 

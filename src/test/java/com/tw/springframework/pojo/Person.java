@@ -3,14 +3,12 @@ package com.tw.springframework.pojo;
 import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.context.ApplicationContext;
 import com.tw.springframework.lifecycle.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @Builder
+@ToString
 public class Person implements InitializingBean, DisposableBean, BeanFactoryAware, ApplicationContextAware, BeanNameAware ,Helloable{
     private String name;
     private Integer age;

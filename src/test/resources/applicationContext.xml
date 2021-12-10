@@ -19,10 +19,10 @@
     <bean id="myMethodInterceptor" class="com.tw.springframework.aop.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="mybeforeAdvice"/>
     </bean>
-<!--    <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">-->
-<!--        <property name="expression" value="execution(* com.tw.springframework.pojo.Person.*(..))"/>-->
-<!--        <property name="advice" ref="myMethodInterceptor"/>-->
-<!--    </bean>-->
+    <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* com.tw.springframework.pojo.Helloable.*(..))"/>
+        <property name="advice" ref="myMethodInterceptor"/>
+    </bean>
     <!--  一个beanFactoryPostProcessor的实例，用来将beanDefinition中的占位符替换成真实值-->
     <bean class="com.tw.springframework.lifecycle.PropertyPlaceholderConfigurer" id="propertyPlaceholderConfigurer">
         <property name="location" value="classpath:applicationContext.properties"/>

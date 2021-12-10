@@ -42,7 +42,6 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
             fieldValue = beanFactory.resolveEmbeddedValue(fieldValue);
             String fieldName = declaredField.getName();
             BeanUtil.setFieldValue(bean, fieldName, fieldValue);
-            PropertyValue pv = new PropertyValue();
         }
         for (Field declaredField : declaredFields) {
             Autowired autowired = declaredField.getAnnotation(Autowired.class);
@@ -59,7 +58,6 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
                 beanFactory.getBean(qualifier.value(), dependentType);
             }
             BeanUtil.setFieldValue(bean, declaredField.getName(), dependentBean);
-            PropertyValue pv = new PropertyValue();
         }
 
         return pvs;

@@ -45,7 +45,8 @@ public class BeanFactoryTest {
     public void testAOP() {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
         Object person = classPathXmlApplicationContext.getBean("person");
-        ((Person)person).hello();
+        System.out.println(person.getClass());
+        ((Helloable)person).hello();
     }
     @Test
     public void testAnnoBean() {

@@ -1,5 +1,6 @@
 package com.tw.springframework.aop;
 
+import com.tw.springframework.utils.ClassUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 @NoArgsConstructor
 public class AdvisedSupport {
     /**
-     * 被代理对象
+     *封装的被代理对象
      */
-    private Object target;
+    private TargetSource targetSource;
     /**
      * 方法匹配器，用来判断目标方法，是否和切入点表达式匹配。
      */
@@ -24,5 +25,5 @@ public class AdvisedSupport {
     /**
      * 是否使用cglib代理
      */
-    private boolean proxyTargetClass =true;
+    private boolean proxyTargetClass = true;
 }

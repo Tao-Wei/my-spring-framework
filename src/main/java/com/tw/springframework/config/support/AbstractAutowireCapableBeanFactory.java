@@ -59,9 +59,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
             if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
                 PropertyValues propertyValues = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
-                for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
-                    beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
-                }
+                beanDefinition.setPropertyValues(propertyValues);
             }
         }
     }
@@ -141,7 +139,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     private Object applyBeanPostProcessorsAfterInitialization(Object bean, String beanName) {
         List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
         for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
-            beanPostProcessor.postProcessAfterInitialization(bean, beanName);
+            bean = beanPostProcessor.postProcessAfterInitialization(bean, beanName);
         }
         return bean;
     }
