@@ -1,6 +1,7 @@
 package com.tw.springframework.config;
 
 
+import com.tw.springframework.annotation.StringValueResolver;
 import com.tw.springframework.lifecycle.BeanPostProcessor;
 
 /**
@@ -18,4 +19,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory ,Single
      * 销毁单例对象
      */
     void destroySingletons();
+
+    void addEmbeddedValueResolver(StringValueResolver valueResolver);
+    String resolveEmbeddedValue(String value);
 }

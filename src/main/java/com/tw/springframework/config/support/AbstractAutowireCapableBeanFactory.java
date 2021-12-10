@@ -32,6 +32,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }
 
             bean = createBeanInstance(beanDefinition, args);
+
+            //在bean实例创建后，属性注入之前，允许InstantiationAwareBeanPostProcessor 改变beanDefinition的属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
             applyPropertyValues(beanDefinition, bean);
             bean = initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
@@ -42,6 +45,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             addSingleton(beanName, bean);
         }
         return bean;
+    }
+
+
+    /**
+     * 在bean实例被创建后，属性赋值前，允许InstantiationAwareBeanPostProcessor的实例，修改beanDefinition中的属性
+     *
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
+    private void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                PropertyValues propertyValues = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+                    beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                }
+            }
+        }
     }
 
     protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
@@ -55,7 +77,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     /**
-     *
      * @param beanName
      * @param beanDefinition
      * @return

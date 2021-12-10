@@ -3,6 +3,7 @@ package com.tw.springframework.annotation;
 import cn.hutool.core.util.StrUtil;
 import com.tw.springframework.config.BeanDefinitionRegistry;
 import com.tw.springframework.config.support.BeanDefinition;
+import com.tw.springframework.config.support.PropertyValues;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 beanDefinitionRegistry.registerBeanDefinition(determineBeanName(candidateComponent), candidateComponent);
             }
         }
+        // 注册处理注解的 BeanPostProcessor（@Autowired、@Value）
+        BeanDefinition autowiredAnnotationBeanPostProcessorBeanDefinition = new BeanDefinition();
+        autowiredAnnotationBeanPostProcessorBeanDefinition.setPropertyValues(new PropertyValues(null));
+        autowiredAnnotationBeanPostProcessorBeanDefinition.setBeanClass(AutowiredAnnotationBeanPostProcessor.class);
+        beanDefinitionRegistry.registerBeanDefinition("autowiredAnnotationBeanPostProcessor", autowiredAnnotationBeanPostProcessorBeanDefinition);
+
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {

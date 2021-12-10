@@ -1,5 +1,6 @@
 package com.tw.springframework.config.support;
 
+import com.tw.springframework.annotation.StringValueResolver;
 import com.tw.springframework.config.ConfigurableBeanFactory;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.BeanPostProcessor;
@@ -10,7 +11,10 @@ import java.util.List;
 
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
+
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     @Override
     public Object getBean(String beanName) {
@@ -40,7 +44,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             throw new BeansException("bean定义对象不存在");
         }
         Object bean = createBean(beanName, beanDefinition, args);
-        return getObjectForBeanInstance(bean,beanName);
+        return getObjectForBeanInstance(bean, beanName);
     }
 
     private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
@@ -71,6 +75,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
         beanPostProcessors.add(beanPostProcessor);
+    }
+
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        embeddedValueResolvers.add(valueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+
+        for (StringValueResolver embeddedValueResolver : embeddedValueResolvers) {
+            value = embeddedValueResolver.resolveStringValue(value);
+        }
+        return value;
     }
 
     public List<BeanPostProcessor> getBeanPostProcessors() {

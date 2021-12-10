@@ -4,6 +4,7 @@ import cn.hutool.core.util.ClassUtil;
 import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.BeanFactoryAware;
+import com.tw.springframework.utils.ClassUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -59,7 +60,7 @@ public abstract class AbstractApplicationEventMulticaster implements Application
     private boolean supportEvent(ApplicationListener listener, ApplicationEvent event) {
         Class clazz = listener.getClass();
         //如果包含$$就说明是cglib,要获取其超类的class对象
-        if (clazz.getName().contains("$$")) {
+        if (ClassUtils.isCglibProxyClass(clazz)) {
             clazz = clazz.getSuperclass();
         }
         Type genericInterface = clazz.getGenericInterfaces()[0];
@@ -71,6 +72,7 @@ public abstract class AbstractApplicationEventMulticaster implements Application
             throw new BeansException("监听器泛型错误，泛型名：" + actualTypeArgument.getTypeName());
         }
     }
+
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {

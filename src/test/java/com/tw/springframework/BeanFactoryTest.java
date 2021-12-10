@@ -50,11 +50,8 @@ public class BeanFactoryTest {
     @Test
     public void testAnnoBean() {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        Object person = classPathXmlApplicationContext.getBean("person");
-        Object cat= classPathXmlApplicationContext.getBean("cat");
-        System.out.println(cat);
-        System.out.println(person);
-
+        Object man= classPathXmlApplicationContext.getBean("man");
+        System.out.println(man);
     }
 
 

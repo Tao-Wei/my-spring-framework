@@ -2,6 +2,7 @@ package com.tw.springframework.aop;
 
 import com.tw.springframework.config.BeanFactory;
 import com.tw.springframework.config.support.DefaultListableBeanFactory;
+import com.tw.springframework.config.support.PropertyValues;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.BeanFactoryAware;
 import org.aopalliance.aop.Advice;
@@ -41,6 +42,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
         }
         return null;
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException {
+        return pvs;
     }
 
     @Override

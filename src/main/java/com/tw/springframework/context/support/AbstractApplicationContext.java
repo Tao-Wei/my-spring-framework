@@ -16,6 +16,11 @@ import java.util.Map;
  * 这个类主要当作用就是实现ConfigurableApplicationContext中所有接口当大体逻辑，部分当实现细节交给子类完成（模版方法模式）
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+    @Override
+    public <T> T getBean(Class<T> requiredType) throws BeansException {
+
+        return getBeanFactory().getBean(requiredType);
+    }
 
     private ApplicationEventMulticaster applicationEventMulticaster;
     public static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME = "applicationEventMulticaster";
