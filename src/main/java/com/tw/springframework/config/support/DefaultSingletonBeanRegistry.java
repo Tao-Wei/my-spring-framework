@@ -1,5 +1,6 @@
 package com.tw.springframework.config.support;
 
+import com.tw.springframework.aop.ObjectFactory;
 import com.tw.springframework.config.SingletonBeanRegistry;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.DisposableBean;
@@ -14,7 +15,12 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     protected static final Object NULL_OBJECT = new Object();
 
+    //已经注入属性，并且已经代理过了的对象（如果需要代理的的话）
     private final Map<String, Object> singletonBeans = new ConcurrentHashMap<>();
+    //还没有注入属性，已经代理过了的对象（如果需要代理的的话）
+    private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>();
+    //没有注入属性，包装了一层的未代理对象，
+    private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<String, ObjectFactory<?>>();
 
     private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
 
@@ -26,7 +32,25 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
      */
     @Override
     public Object getSingleton(String name) {
-        return singletonBeans.get(name);
+        Object singletonObject = null;
+        //从一级缓存中获取，如果有直接返回
+        singletonObject = singletonBeans.get(name);
+        if (singletonObject != null) {
+            return singletonObject;
+        }
+        //从二级缓存中获取，如果有直接返回
+        singletonObject = earlySingletonObjects.get(name);
+        if (singletonObject != null) {
+            return singletonObject;
+        }
+
+        //从三级缓存中获取，如果有那么调用getObject方法，获取代理对象。然后将对象放入到二级缓存
+        ObjectFactory<?> objectFactory = singletonFactories.remove(name);
+        if (objectFactory != null) {
+            singletonObject = objectFactory.getObject();
+            earlySingletonObjects.put(name, singletonObject);
+        }
+        return singletonObject;
     }
 
     /**
@@ -60,7 +84,11 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     @Override
     public void registerSingleton(String beanName, Object singletonObject) {
-        addSingleton(beanName,singletonObject);
+        addSingleton(beanName, singletonObject);
+    }
+
+    protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
+        this.singletonFactories.put(beanName, singletonFactory);
     }
 
 }

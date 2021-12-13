@@ -7,6 +7,10 @@ import com.tw.springframework.config.support.DefaultListableBeanFactory;
 import com.tw.springframework.config.support.XmlBeanDefinitionReader;
 import com.tw.springframework.context.support.ClassPathXmlApplicationContext;
 import com.tw.springframework.pojo.*;
+import com.tw.springframework.pojo.testcycle.Student;
+import com.tw.springframework.pojo.testcycle.StudentImpl;
+import com.tw.springframework.pojo.testcycle.Teacher;
+import com.tw.springframework.pojo.testcycle.TeacherImpl;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,7 +41,7 @@ public class BeanFactoryTest {
     @Test
     public void testMethodMatcher() throws NoSuchMethodException {
         Class<Person> personClass = Person.class;
-        Method helloMethod= personClass.getDeclaredMethod("hello");
+        Method helloMethod = personClass.getDeclaredMethod("hello");
         System.out.println(new AspectJExpressionPointcut("execution(* com.tw.springframework.pojo.Person.*(..))").matches(helloMethod, personClass));
     }
 
@@ -46,13 +50,24 @@ public class BeanFactoryTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
         Object person = classPathXmlApplicationContext.getBean("person");
         System.out.println(person.getClass());
-        ((Helloable)person).hello();
+        ((Helloable) person).hello();
     }
+
     @Test
     public void testAnnoBean() {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        Object man= classPathXmlApplicationContext.getBean("man");
+        Object man = classPathXmlApplicationContext.getBean("man");
         System.out.println(man);
+    }
+
+    @Test
+    public void testCycle() {
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        Student student = (Student) classPathXmlApplicationContext.getBean("student");
+        System.out.println(student.getClass());
+        System.out.println(student.getTeacher().getClass());
+        Teacher teacher = (Teacher) classPathXmlApplicationContext.getBean("teacher");
+        System.out.println(student.getTeacher()==teacher);
     }
 
 

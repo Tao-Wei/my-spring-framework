@@ -3,15 +3,23 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod"
-          scope="singleton">
-        <property name="name" value="${person.name}"/>
-        <property name="age" value="${person.age}"/>
-        <property name="dog" ref="dog"/>
-    </bean>
-    <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype"></bean>
+    <!--    <bean id="person" class="com.tw.springframework.pojo.Person" destroy-method="destroyMethod" init-method="initMethod"-->
+    <!--          scope="singleton">-->
+    <!--        <property name="name" value="${person.name}"/>-->
+    <!--        <property name="age" value="${person.age}"/>-->
+    <!--        <property name="dog" ref="dog"/>-->
+    <!--    </bean>-->
+    <!--    <bean id="dog" class="com.tw.springframework.pojo.Dog" scope="prototype"></bean>-->
 
     <!--    InstantiationAwareBeanPostProcessor接口的实现类，用来创建代理类-->
+    <bean class="com.tw.springframework.pojo.testcycle.TeacherImpl" id="teacher">
+        <property ref="student" name="student"/>
+    </bean>
+    <bean class="com.tw.springframework.pojo.testcycle.StudentImpl" id="student">
+        <property ref="teacher" name="teacher"/>
+    </bean>
+
+
     <bean class="com.tw.springframework.aop.DefaultAdvisorAutoProxyCreator"/>
     <!--    自定义的前置通知类-->
     <bean id="mybeforeAdvice" class="com.tw.springframework.aop.MyBeforeAdvice"/>
@@ -20,12 +28,12 @@
         <property name="advice" ref="mybeforeAdvice"/>
     </bean>
     <bean class="com.tw.springframework.aop.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* com.tw.springframework.pojo.Helloable.*(..))"/>
+        <property name="expression" value="execution(* com.tw.springframework.pojo.testcycle.*.*(..))"/>
         <property name="advice" ref="myMethodInterceptor"/>
     </bean>
     <!--  一个beanFactoryPostProcessor的实例，用来将beanDefinition中的占位符替换成真实值-->
     <bean class="com.tw.springframework.lifecycle.PropertyPlaceholderConfigurer" id="propertyPlaceholderConfigurer">
         <property name="location" value="classpath:applicationContext.properties"/>
     </bean>
-    <context:component-scan base-package="com.tw.springframework.pojo.testanno"/>
+    <context:component-scan base-package="com.tw.springframework.pojo.testcycle"/>
 </beans>

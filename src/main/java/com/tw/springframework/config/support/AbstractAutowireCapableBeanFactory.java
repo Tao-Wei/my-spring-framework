@@ -3,6 +3,7 @@ package com.tw.springframework.config.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.tw.springframework.aop.InstantiationAwareBeanPostProcessor;
+import com.tw.springframework.aop.ObjectFactory;
 import com.tw.springframework.config.InstantiationStrategy;
 import com.tw.springframework.exception.BeansException;
 import com.tw.springframework.lifecycle.*;
@@ -30,8 +31,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (null != bean) {
                 return bean;
             }
-
             bean = createBeanInstance(beanDefinition, args);
+            //提前暴露对象
+            if (beanDefinition.isSingleton()) {
+                Object finalBean = bean;
+               addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, beanDefinition, finalBean));
+            }
 
             //在bean实例创建后，属性注入之前，允许InstantiationAwareBeanPostProcessor 改变beanDefinition的属性值
             applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
@@ -42,9 +47,24 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         //单例的bean对象才加入单例池
         if (beanDefinition.isSingleton()) {
+            // 获取代理对象,(因为可能出现循环依赖，导致代理对象其实是在其他bean注入属性的时候创建的)
+            bean = getSingleton(beanName);
+            registerSingleton(beanName, bean);
+
             addSingleton(beanName, bean);
         }
         return bean;
+    }
+
+    protected Object getEarlyBeanReference(String beanName, BeanDefinition beanDefinition, Object bean) {
+        Object exposedObject = bean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                exposedObject = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).getEarlyBeanReference(exposedObject, beanName);
+                if (null == exposedObject) return exposedObject;
+            }
+        }
+        return exposedObject;
     }
 
 

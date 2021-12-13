@@ -1,5 +1,7 @@
 package com.tw.springframework.config.support;
 
+import cn.hutool.core.util.StrUtil;
+import com.sun.deploy.util.StringUtils;
 import com.tw.springframework.config.ConfigurableBeanFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,7 +47,7 @@ public class BeanDefinition {
     }
 
     public void setScope(String scope) {
-        singleton = ConfigurableBeanFactory.SCOPE_SINGLETON.equals(scope);
+        singleton = StrUtil.EMPTY.equals(scope)|| ConfigurableBeanFactory.SCOPE_SINGLETON.equals(scope);
         prototype = ConfigurableBeanFactory.SCOPE_PROTOTYPE.equals(scope);
         this.scope = scope;
     }
